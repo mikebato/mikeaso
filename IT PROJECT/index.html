@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+  <html lang="en">
+  
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Watch Shop</title>
+    <style>
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      background-color: #333;
+      color: orange;
+    }
+
+    header .logo h1 {
+      margin: 0;
+    }
+
+    header .cart button {
+      background-color: rgba(255, 165, 0, 1);
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .product {
+      text-align: center;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: white;
+    }
+
+    .product img {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 10px;
+    }
+
+    .product button {
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .product button:hover {
+      background-color: white;
+      color: #2ecc71;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #333;
+      color: orange;
+    }
+
+    .cart-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .cart-popup-content {
+      background-color: white;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .cart-popup-content button {
+      margin-top: 10px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .cart-popup-content button:hover {
+      background-color: grey;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <h1>Watch Shop</h1>
+    </div>
+    <div class="cart">
+      <button onclick="viewCart()">Cart <span id="cart-count">0</span> Items</button>
+    </div>
+  </header>
+  <main>
+    <!-- Restored Product List -->
+    <div class="product">
+      <img src="cwatch.jpg" alt="Watch 1">
+      <h2>Classic Watch</h2>
+      <p>₱1,000.00</p>
+      <button onclick="addToCart('Classic Watch', 1000)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="swatch.jpg" alt="Watch 2">
+      <h2>Sports Watch</h2>
+      <p>₱1,200.00</p>
+      <button onclick="addToCart('Sports Watch', 1200)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="lwatch.jpg" alt="Watch 3">
+      <h2>Luxury Watch</h2>
+      <p>₱5,000.00</p>
+      <button onclick="addToCart('Luxury Watch', 5000)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="cs.jpg" alt="Watch 4">
+      <h2>Casual Watch</h2>
+      <p>₱1,800.00</p>
+      <button onclick="addToCart('Casual Watch', 1800)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="e.jpg" alt="Watch 5">
+      <h2>Elegant Watch</h2>
+      <p>₱2,000.00</p>
+      <button onclick="addToCart('Elegant Watch', 2000)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="hw.jpg" alt="Watch 6">
+      <h2>Hybrid Watch</h2>
+      <p>₱1,300.00</p>
+      <button onclick="addToCart('Hybrid Watch', 1300)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="dg.jpg" alt="Watch 7">
+      <h2>Digital Watch</h2>
+      <p>₱2,000.00</p>
+      <button onclick="addToCart('Digital Watch', 2000)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="v.jpg" alt="Watch 8">
+      <h2>Vintage Watch</h2>
+      <p>₱3,800.00</p>
+      <button onclick="addToCart('Vintage Watch', 3800)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="gld.jpg" alt="Watch 9">
+      <h2>Gold Watch</h2>
+      <p>₱3,500.00</p>
+      <button onclick="addToCart('Gold Watch', 3500)">Add to Cart</button>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; Watch Shop. Made by Good Students</p>
+  </footer>
+  <div id="cart-popup" class="cart-popup">
+    <div class="cart-popup-content">
+      <h2>Your Cart</h2>
+      <ul id="cart-items">
+        <!-- Cart items will be listed here -->
+      </ul>
+      <p>Total: ₱<span id="cart-total">0.00</span></p>
+      <button onclick="clearCart()">Clear Cart</button>
+      <button onclick="closeCart()">Close</button>
+    </div>
+  </div>
+  <script>
+    let cart = [];
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartCount = document.getElementById("cart-count");
+      const cartItems = document.getElementById("cart-items");
+      const cartTotal = document.getElementById("cart-total");
+
+      cartCount.textContent = cart.length;
+      cartItems.innerHTML = ""; // Clear previous items
+      let total = 0;
+
+      cart.forEach(item => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${item.name} - ₱${item.price.toFixed(2)}`;
+        cartItems.appendChild(listItem);
+        total += item.price;
+      });
+
+      cartTotal.textContent = total.toFixed(2);
+    }
+
+    function viewCart() {
+      const cartPopup = document.getElementById("cart-popup");
+      cartPopup.style.display = "flex";
+    }
+
+    function closeCart() {
+      const cartPopup = document.getElementById("cart-popup");
+      cartPopup.style.display = "none";
+    }
+
+    function clearCart() {
+      cart = [];
+      updateCartDisplay();
+      closeCart();
+    }
+  </script>
+</body>
+
+</html>
